@@ -12,9 +12,7 @@
             text-align:center;
         }
 
-        h2{
-            margin-top:20px;
-        }
+        h2{ margin-top:20px; }
 
         .box{
             width:320px;
@@ -43,7 +41,6 @@
             font-size:35px;
             margin:15px auto;
             cursor:pointer;
-            transition:0.3s;
         }
 
         button{
@@ -57,7 +54,6 @@
 
         .msg{
             margin-top:10px;
-            font-size:14px;
         }
     </style>
 </head>
@@ -72,12 +68,10 @@
     <input type="text" id="subject" placeholder="Enter Subject">
     <input type="text" id="title" placeholder="Enter Title">
 
-    <!-- upload button -->
     <div class="upload" id="uploadBtn" onclick="chooseFile()">+</div>
-
     <input type="file" id="file" style="display:none" onchange="fileSelected(event)">
 
-    <button onclick="saveNotes()">Send</button>
+    <button onclick="saveNotes()">Send Notes</button>
 
     <div class="msg" id="msg"></div>
 
@@ -94,7 +88,6 @@ function chooseFile(){
 function fileSelected(e){
     fileData = e.target.files[0];
 
-    // + becomes ✔
     document.getElementById("uploadBtn").innerText = "✔";
     document.getElementById("uploadBtn").style.background = "green";
 }
@@ -111,16 +104,27 @@ function saveNotes(){
         return;
     }
 
+    let user = localStorage.getItem("currentUser");
+
+    let data = {
+        class: cls,
+        subject: sub,
+        title: title,
+        fileName: fileData.name,
+        fileURL: URL.createObjectURL(fileData),
+        user: user
+    };
+
+    localStorage.setItem("notes_" + Date.now(), JSON.stringify(data));
+
     document.getElementById("msg").innerText = "Notes successfully saved";
     document.getElementById("msg").style.color = "green";
 
-    // reset form
     document.getElementById("class").value="";
     document.getElementById("subject").value="";
     document.getElementById("title").value="";
     fileData=null;
 
-    // reset upload button
     document.getElementById("uploadBtn").innerText = "+";
     document.getElementById("uploadBtn").style.background = "#333";
 }
