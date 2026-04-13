@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <style>
+        body{
+            font-family: Arial;
+            margin:0;
+            background:#e9e9e9;
+            text-align:center;
+        }
+
+        h2{ margin-top:20px; }
+
+        .note-box{
+            width:320px;
+            margin:15px auto;
+            background:white;
+            padding:15px;
+            border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.2);
+            text-align:left;
+        }
+
+        .title{
+            font-size:18px;
+            font-weight:bold;
+        }
+
+        .info{
+            font-size:13px;
+            color:#444;
+            margin-top:8px;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:10px;
+            padding:8px;
+            background:blue;
+            color:white;
+            text-decoration:none;
+            font-size:13px;
+            border-radius:5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>VIEW NOTES</h2>
+
+<div id="container"></div>
+
+<script>
+
+function loadNotes(){
+
+    let container = document.getElementById("container");
+
+    for(let i=0;i<localStorage.length;i++){
+
+        let key = localStorage.key(i);
+
+        if(key.startsWith("notes_")){
+
+            let data = JSON.parse(localStorage.getItem(key));
+
+            let username = localStorage.getItem(data.user+"_username") || data.user;
+            let display = localStorage.getItem(data.user+"_display") || "User "+data.user;
+
+            let box = document.createElement("div");
+            box.className = "note-box";
+
+            box.innerHTML = `
+                <div class="title">${data.title}</div>
+
+                <div class="info">
+                    <b>Class:</b> ${data.class}<br>
+                    <b>Subject:</b> ${data.subject}<br><br>
+
+                    <b>Uploaded by:</b><br>
+                    ${display}<br>
+                    ${username}<br>
+                    SCS: ${data.user}
+                </div>
+
+                <a class="btn" href="${data.fileURL}" download="${data.fileName}">
+                    Download Notes
+                </a>
+            `;
+
+            container.appendChild(box);
+        }
+    }
+}
+
+loadNotes();
+
+</script>
+
+</body>
+</html>
